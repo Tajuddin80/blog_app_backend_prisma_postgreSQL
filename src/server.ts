@@ -1,4 +1,3 @@
-import { type Request, type Response } from "express";
 import app from "./app";
 import { prisma } from "./lib/prisma";
 
