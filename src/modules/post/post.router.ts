@@ -9,6 +9,7 @@ import { auth, ROLES } from "../../middlewares/auth";
 
 const router = Router();
 
+router.get("/", postControllers.getAllPost);
 router.post("/create-post", auth(ROLES.USER), postControllers.createPost);
-router.get("/", postControllers.getAllPosts);
+
 export const postRouter: Router = router;

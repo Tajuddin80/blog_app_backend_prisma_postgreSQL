@@ -12,7 +12,7 @@ const app: Application = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: process.env.APP_URL || "http://localhost:4000",
+    origin: process.env.APP_URL || "http://localhost:4000", //! client side url
     credentials: true,
   })
 );
