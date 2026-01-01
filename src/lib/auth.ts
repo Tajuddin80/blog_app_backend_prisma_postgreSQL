@@ -37,11 +37,15 @@ export const auth = betterAuth({
     requireEmailVerification: true,
   },
   emailVerification: {
+    sendOnSignUp: true,
+    autoSignInAfterVerification: true,
     sendVerificationEmail: async ({ user, url, token }, request) => {
-      const verificationUrl = `${process.env.APP_URL}/verify-email?token=${token}`;
+      // console.log({user, url, token});
+      try {
+        const verificationUrl = `${process.env.APP_URL}/verify-email?token=${token}`;
 
-      // Email HTML template
-      const htmlTemplate = `
+        // Email HTML template
+        const htmlTemplate = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -143,8 +147,8 @@ export const auth = betterAuth({
 </html>
       `;
 
-      // Plain text version as fallback
-      const textVersion = `
+        // Plain text version as fallback
+        const textVersion = `
 Hi ${user.name || "there"},
 
 Welcome to Prisma Blog App! We're excited to have you on board.
@@ -161,15 +165,27 @@ Need help? Contact us at support@prismablogapp.com
 © 2025 Prisma Blog App. All rights reserved.
       `;
 
-      const info = await transporter.sendMail({
-        from: '"Prisma Blog App" <prismablogapp@gmail.com>',
-        to: user.email,
-        subject: "🔐 Verify your email address - Prisma Blog App",
-        text: textVersion,
-        html: htmlTemplate,
-      });
+        const info = await transporter.sendMail({
+          from: '"Prisma Blog App" <prismablogapp@gmail.com>',
+          to: user.email,
+          subject: "🔐 Verify your email address - Prisma Blog App",
+          text: textVersion,
+          html: htmlTemplate,
+        });
 
-      console.log("Verification email sent:", info.messageId);
+        console.log("Verification email sent:", info.messageId);
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    },
+  },
+  socialProviders: {
+    google: {
+      prompt: "select_account consent",
+      accessType: "offline",
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     },
   },
   rateLimit: {
