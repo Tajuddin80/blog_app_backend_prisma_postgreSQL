@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "bun --watch src/server.ts",
+    "seed:admin": "bun src/scripts/seedAdmin.ts",
     "prisma": "bunx prisma",
     "studio": "bunx prisma studio"
   },
